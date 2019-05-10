@@ -16,13 +16,45 @@ use BeeGame\Contracts\BeeGameInterface;
 
 class BeeGameSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    private $beeTypes;
+    private $hits;
+
+    function __construct()
+    {
+        $this->beeTypes = ['QUEEN', 'WORKER', 'DRONE'];
+        $this->hits = [8, 10, 12];
+    }
+
+    public function it_is_initializable()
     {
         $this->shouldHaveType(BeeGame::class);
     }
 
-    function it_implements_a_contract()
+    public function it_implements_a_contract()
     {
         $this->shouldImplement(BeeGameInterface::class);
     }
+
+    public function getMatchers() : array
+    {
+        return [
+            'haveArrayWithCount' => function ($array, $index, $count = null) {
+                return count($array[$index]) == $count ? true : false;
+            },
+            'haveArrayWithLastShotData' => function ($array, $index) {
+
+                switch ($index) {
+                    case 'bee_type' :
+                        return in_array($array['last_shot']['bee_type'], $this->beeTypes);
+                        break;
+                    case 'points' :
+                        return in_array($array['last_shot']['points'], $this->hits);
+                        break;
+                    default:
+                        return false;
+                }
+            }
+        ];
+    }
 }
+

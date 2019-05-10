@@ -22,7 +22,7 @@ class GameBuilder extends BeeGame implements GameBuilderInterface
         parent::__construct();
     }
 
-    public function buildGameState()
+    public function buildGameState() : array
     {
         $this->gameState = [
             'game_over' => false,
@@ -46,7 +46,7 @@ class GameBuilder extends BeeGame implements GameBuilderInterface
         return $this->gameState;
     }
 
-    public function buildGameParams()
+    public function buildGameParams() : array
     {
         $gameParams = [];
 
@@ -57,7 +57,7 @@ class GameBuilder extends BeeGame implements GameBuilderInterface
         return $gameParams;
     }
 
-    public function setBee($pre)
+    public function setBee($pre) : array
     {
         $arr = [];
 
@@ -69,12 +69,12 @@ class GameBuilder extends BeeGame implements GameBuilderInterface
         return $arr;
     }
 
-    public function getBee($iterator)
+    public function getBee($iterator) : array
     {
         return $this->gameState['play_array'][$iterator];
     }
 
-    public function buildBees($bee)
+    public function buildBees($bee) : array
     {
         $count = $bee['count'];
         $x = 0;

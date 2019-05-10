@@ -7,21 +7,32 @@ use Prophecy\Argument;
 
 use BeeGame\BeeGame;
 use BeeGame\Classes\GameRunner;
+use BeeGame\Classes\GameBuilder;
 use BeeGame\Contracts\GameRunnerInterface;
+use spec\BeeGame\BeeGameSpec;
 
-class GameRunnerSpec extends ObjectBehavior
+class GameRunnerSpec extends BeeGameSpec
 {
-    function it_is_initializable()
+    private $gameState;
+
+    function __construct()
+    {
+        parent::__construct();
+        $gameBuilder = new GameBuilder();
+        $this->gameState = $gameBuilder->buildGameState();
+    }
+
+    public function it_is_initializable()
     {
         $this->shouldHaveType(GameRunner::class);
     }
 
-    function it_implements_a_contract()
+    public function it_implements_a_contract()
     {
         $this->shouldImplement(GameRunnerInterface::class);
     }
 
-    function it_extends_a_parent()
+    public function it_extends_a_parent()
     {
         $this->shouldBeAnInstanceOf(BeeGame::class);
     }
@@ -32,14 +43,41 @@ class GameRunnerSpec extends ObjectBehavior
 
         $this->randomIndex($beeKeys)->shouldBeNumeric();
     }
-//
-//    function it_returns_a_hits_value_for_bee_type()
-//    {
-//
-//    }
-//
-//    function it_returns_a_status_for_bee_type()
-//    {
-//
-//    }
+
+    public function it_returns_an_array_of_living_bees()
+    {
+        $this->returnLivingBeeIndex($this->gameState['play_array'])->shouldHaveCount(14);
+    }
+
+    public function it_works_out_if_a_bee_is_alive()
+    {
+        $this->isBeeDead($this->gameState['play_array'][0])->shouldReturn(false);
+    }
+
+    public function it_returns_game_over_status()
+    {
+        $this->isGameOver($this->gameState['play_array'])->shouldReturn(false);
+    }
+
+    public function it_should_make_a_shot()
+    {
+        $this->run($this->gameState)->shouldNotBeEqualTo($this->gameState);
+//        $this->gameState->shoot();
+    }
+
+    public function it_should_return_a_positive_shot_count()
+    {
+        $this->run($this->gameState);
+        $this->returnShotCount()->shouldBeEqualTo(1);
+    }
+
+    public function it_should_specify_a_bee_type_that_was_shot()
+    {
+        $this->run($this->gameState)->shouldHaveArrayWithLastShotData('bee_type');
+    }
+
+    public function it_should_specify_a_hit_value_for_last_shot()
+    {
+        $this->run($this->gameState)->shouldHaveArrayWithLastShotData('points');
+    }
 }

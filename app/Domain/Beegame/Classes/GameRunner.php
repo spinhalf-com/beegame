@@ -20,14 +20,14 @@ class GameRunner extends BeeGame implements GameRunnerInterface
         parent::__construct();
     }
 
-    public function run($gameState)
+    public function run($gameState) : array
     {
         $this->gameState = $gameState;
         $this->shoot();
         return $this->gameState;
     }
 
-    public function returnLivingBeeIndex($bees)
+    public function returnLivingBeeIndex($bees) : array
     {
         $livingBees = [];
 
@@ -39,12 +39,12 @@ class GameRunner extends BeeGame implements GameRunnerInterface
         return $livingBees;
     }
 
-    public function isBeeDead($bee)
+    public function isBeeDead($bee) : bool
     {
         return($bee['lifespan'] < 0) ? true: false;
     }
 
-    public function isGameOver($gameData)
+    public function isGameOver($gameData) : bool
     {
         if($this->isBeeDead($gameData[0])) {
             return true;
@@ -60,7 +60,7 @@ class GameRunner extends BeeGame implements GameRunnerInterface
         return $gameOver;
     }
 
-    public function shoot()
+    public function shoot() : int
     {
         $bees = $this->gameState['play_array'];
 
@@ -70,14 +70,16 @@ class GameRunner extends BeeGame implements GameRunnerInterface
 
         $beeStateAfterShot = $this->setNewBeeLifespan($indexOfBeeShot);
         $this->shotCount = $this->gameState['last_shot']['shot_count'] + 1;
+
+        return $beeStateAfterShot;
     }
 
-    public function randomIndex($livingBees)
+    public function randomIndex($livingBees) : int
     {
         return array_rand($livingBees, 1);
     }
 
-    public function setNewBeeLifespan($indexOfBeeShot)
+    public function setNewBeeLifespan($indexOfBeeShot) : int
     {
         $shotBee = $this->gameState['play_array'][$indexOfBeeShot];
 
@@ -89,5 +91,17 @@ class GameRunner extends BeeGame implements GameRunnerInterface
         $this->gameState['last_shot']['shot_count'] = $this->shotCount;
         $this->gameState['play_array'][$indexOfBeeShot] = $shotBee;
         $this->gameState['game_over'] = $this->isGameOver($this->gameState['play_array']);
+
+        return $newLifespan;
+    }
+
+    public function returnShotCount()
+    {
+        return $this->shotCount;
+    }
+
+    public function returnGameState()
+    {
+        return $this->gameState;
     }
 }
