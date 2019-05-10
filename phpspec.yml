@@ -1,0 +1,8 @@
+suites:
+  scrape_suite:
+    psr4_prefix: BeeGame
+    namespace: BeeGame
+    src_path: app/
+    spec_path: app/
+    spec_prefix: spec
+formatter.name: pretty
