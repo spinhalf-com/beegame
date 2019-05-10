@@ -33,9 +33,9 @@ class GameBuilderSpec extends ObjectBehavior
 
     function it_builds_game_conditions_from_dotenv()
     {
-        //(print_r($this->getWrappedObject($this->buildGameParams())));
         $this->buildGameParams()->shouldBeArray();
     }
+
 
 //    function it_instantiates_game_conditions_at_beginning_of_game()
 //    {
